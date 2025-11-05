@@ -50,7 +50,7 @@ def tulosta_negatiivinen_lisays(mehua):
 
 def tulosta_liian_suuri_otto(olutta):
     print(f"Olutvarasto: {olutta}")
-    print('olutta.ota_varastosta(1000.0)')
+    print("olutta.ota_varastosta(1000.0)")
     saatiin = olutta.ota_varastosta(1000.0)
     print(f"saatiin {saatiin}")
     print(f"Olutvarasto: {olutta}")
