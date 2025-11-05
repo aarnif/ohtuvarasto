@@ -43,7 +43,7 @@ def tulosta_liian_suuri_lisays(olutta):
 
 def tulosta_negatiivinen_lisays(mehua):
     print(f"Mehuvarasto: {mehua}")
-    print("mehua.lisaa_varastoon(-666.0)")
+    print('mehua.lisaa_varastoon(-666.0)')
     mehua.lisaa_varastoon(-666.0)
     print(f"Mehuvarasto: {mehua}")
 
