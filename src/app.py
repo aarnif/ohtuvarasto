@@ -126,7 +126,3 @@ def delete_inventory(inventory_id):
     del inventories[inventory_id]
     flash(f'Varasto "{name}" poistettu.', 'success')
     return redirect(url_for('index'))
-
-
-if __name__ == '__main__':
-    app.run()
