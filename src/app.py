@@ -1,8 +1,9 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from varasto import Varasto
 
 app = Flask(__name__)
-app.secret_key = 'varasto-secret-key'
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
 inventories = {}
 next_id = 1
