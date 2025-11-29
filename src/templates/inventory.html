@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ inventory.name }} - Varasto{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ inventory.name }}</h2>
+    
+    <div class="stats">
+        <p><strong>Tilavuus:</strong> {{ "%.1f"|format(inventory.varasto.tilavuus) }}</p>
+        <p><strong>Saldo:</strong> {{ "%.1f"|format(inventory.varasto.saldo) }}</p>
+        <p><strong>Tilaa jäljellä:</strong> {{ "%.1f"|format(inventory.varasto.paljonko_mahtuu()) }}</p>
+    </div>
+    
+    <div class="progress-bar">
+        {% set fill = 0 %}
+        {% if inventory.varasto.tilavuus > 0 %}
+            {% set fill = (inventory.varasto.saldo / inventory.varasto.tilavuus) * 100 %}
+        {% endif %}
+        <div class="progress-fill" style="width: {{ fill }}%"></div>
+    </div>
+</div>
+
+<div class="container">
+    <h3>Lisää varastoon</h3>
+    <form action="{{ url_for('add_to_inventory', inventory_id=inventory_id) }}" method="POST">
+        <div class="form-group">
+            <label for="add-amount">Määrä:</label>
+            <input type="number" id="add-amount" name="amount" step="0.1" min="0.1" required>
+        </div>
+        <button type="submit" class="btn btn-success">Lisää</button>
+    </form>
+</div>
+
+<div class="container">
+    <h3>Ota varastosta</h3>
+    <form action="{{ url_for('remove_from_inventory', inventory_id=inventory_id) }}" method="POST">
+        <div class="form-group">
+            <label for="remove-amount">Määrä:</label>
+            <input type="number" id="remove-amount" name="amount" step="0.1" min="0.1" required>
+        </div>
+        <button type="submit" class="btn btn-danger">Ota</button>
+    </form>
+</div>
+
+<div class="container">
+    <h3>Päivitä varasto</h3>
+    <form action="{{ url_for('update_inventory', inventory_id=inventory_id) }}" method="POST">
+        <div class="form-group">
+            <label for="name">Uusi nimi:</label>
+            <input type="text" id="name" name="name" value="{{ inventory.name }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Päivitä</button>
+    </form>
+</div>
+
+<a href="{{ url_for('index') }}" class="btn btn-secondary">Takaisin</a>
+{% endblock %}

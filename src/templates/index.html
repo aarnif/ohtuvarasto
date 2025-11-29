@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Varastot{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Luo uusi varasto</h2>
+    <form action="{{ url_for('create_inventory') }}" method="POST">
+        <div class="form-group">
+            <label for="name">Nimi:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="capacity">Tilavuus:</label>
+            <input type="number" id="capacity" name="capacity" 
+                   step="0.1" min="0.1" required>
+        </div>
+        <div class="form-group">
+            <label for="initial">Alkusaldo (valinnainen):</label>
+            <input type="number" id="initial" name="initial" 
+                   step="0.1" min="0" value="0">
+        </div>
+        <button type="submit" class="btn btn-primary">Luo varasto</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Varastot</h2>
+    {% if inventories %}
+        <ul class="inventory-list">
+            {% for id, inv in inventories.items() %}
+                <li class="inventory-item">
+                    <div>
+                        <strong>{{ inv.name }}</strong>
+                        <div class="stats">
+                            Saldo: {{ "%.1f"|format(inv.varasto.saldo) }} / 
+                            {{ "%.1f"|format(inv.varasto.tilavuus) }}
+                        </div>
+                        <div class="progress-bar">
+                            {% set fill = 0 %}
+                            {% if inv.varasto.tilavuus > 0 %}
+                                {% set fill = (inv.varasto.saldo / inv.varasto.tilavuus) * 100 %}
+                            {% endif %}
+                            <div class="progress-fill" style="width: {{ fill }}%"></div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <a href="{{ url_for('view_inventory', inventory_id=id) }}" 
+                           class="btn btn-secondary">Näytä</a>
+                        <form action="{{ url_for('delete_inventory', inventory_id=id) }}" 
+                              method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger" 
+                                    onclick="return confirm('Haluatko varmasti poistaa?')">
+                                Poista
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ei varastoja. Luo uusi varasto ylläolevalla lomakkeella.</p>
+    {% endif %}
+</div>
+{% endblock %}
